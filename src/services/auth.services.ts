@@ -226,6 +226,18 @@ class AuthService {
         password
       })
 
+      await databaseService.users.updateOne(
+        { email: userInfo.email },
+        {
+          $set: {
+            avatar_image: userInfo.picture
+          },
+          $currentDate: {
+            updated_at: true
+          }
+        }
+      )
+
       return {
         ...data,
         name: userInfo.name,
