@@ -1,4 +1,4 @@
-import { TokenPayload } from './models/requests/User.requests'
+import { TokenPayload } from './models/requests/Auth.requests'
 import { Request } from 'express'
 import User from './models/schemas/User.schema'
 

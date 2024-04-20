@@ -3,10 +3,11 @@ import {
   forgotPasswordController,
   loginController,
   logoutController,
+  oauthController,
   refreshTokenController,
   registerController,
   resetPasswordController
-} from '~/controllers/users.controllers'
+} from '~/controllers/auth.controllers'
 import {
   accessTokenValidator,
   forgotPasswordValidator,
@@ -14,7 +15,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator
-} from '~/middlewares/users.middleware'
+} from '~/middlewares/auth.middleware'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const authRouter = Router()
@@ -22,6 +23,8 @@ const authRouter = Router()
 authRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 authRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+
+authRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 
 authRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 

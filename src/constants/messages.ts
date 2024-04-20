@@ -39,5 +39,6 @@ export const USER_MESSAGES = {
   LOGOUT_SUCCESS: 'Logout success',
   CHECK_EMAIL_TO_FORGOT_PASSWORD: 'Check email to forgot password',
   USER_NOT_FOUND: 'User not found',
-  RESET_PASSWORD_SUCCESS: 'Reset password success'
+  RESET_PASSWORD_SUCCESS: 'Reset password success',
+  GMAIL_NOT_VERIFIED: 'Gmail not verified'
 } as const
