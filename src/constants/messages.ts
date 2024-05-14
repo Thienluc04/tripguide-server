@@ -9,7 +9,8 @@ export const AUTH_MESSAGES = {
   REFRESH_TOKEN_MUST_BE_A_STRING: 'Refresh token must be a string',
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
-  GET_NEW_TOKENS_SUCCESS: 'Get new tokens success'
+  GET_NEW_TOKENS_SUCCESS: 'Get new tokens success',
+  VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success'
 } as const
 
 export const USER_MESSAGES = {
@@ -40,5 +41,26 @@ export const USER_MESSAGES = {
   CHECK_EMAIL_TO_FORGOT_PASSWORD: 'Check email to forgot password',
   USER_NOT_FOUND: 'User not found',
   RESET_PASSWORD_SUCCESS: 'Reset password success',
-  GMAIL_NOT_VERIFIED: 'Gmail not verified'
+  GMAIL_NOT_VERIFIED: 'Gmail not verified',
+  GET_PROFILE_SUCCESS: 'Get profile success',
+  RESEND_VERIFY_EMAIL_SUCCESS: 'Resend verify email success, check your email',
+  EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Email verify token is required',
+  VERIFY_EMAIL_SUCCESS: 'Verify email success',
+  USER_MUST_BE_VERIFIED: 'User must be verified',
+  STREET_ADDRESS_MUST_BE_STRING: 'Street address must be a string',
+  STREET_ADDRESS_LENGTH: 'Street address length must be from 1 to 200',
+  LIVE_IN_MUST_BE_STRING: 'Live in must be a string',
+  LIVE_IN_LENGTH: 'Live in length must be from 1 to 200',
+  WEBSITE_MUST_BE_STRING: 'Website must be a string',
+  WEBSITE_LENGTH: 'Website length must be from 1 to 200',
+  DATE_OF_BIRTH_MUST_BE_ISO8601: 'Date of birth bust be ISO8601',
+  IMAGE_URL_MUST_BE_STRING: 'Image url must be a string',
+  IMAGE_URL_LENGTH: 'Image url length must be from 1 to 400',
+  INVALID_USER_ID: 'Invalid user id',
+  GENDER_INVALID: 'Gender invalid',
+  LANGUAGE_INVALID: 'Language invalid',
+  UPDATE_PROFILE_SUCCESS: 'Update profile success',
+  PASSWORD_INCORRECT: 'Password incorrect',
+  CHANGE_PASSWORD_SUCCESS: 'Change password success',
+  UPLOAD_IMAGE_SUCCESS: 'Upload image success'
 } as const

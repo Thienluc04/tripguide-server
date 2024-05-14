@@ -20,3 +20,8 @@ export enum UserStatus {
   Verified,
   Banned
 }
+
+export enum MediaType {
+  Image,
+  Video
+}

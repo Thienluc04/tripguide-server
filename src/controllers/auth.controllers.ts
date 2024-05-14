@@ -5,17 +5,15 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { AUTH_MESSAGES, USER_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
 import {
-  ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
   RefreshTokenReqBody,
   RegisterReqBody,
-  ResetPasswordReqBody,
   TokenPayload
 } from '~/models/requests/Auth.requests'
 import User from '~/models/schemas/User.schema'
-import databaseService from '~/services/database.services'
 import authService from '~/services/auth.services'
+import databaseService from '~/services/database.services'
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   const result = await authService.register(req.body)
@@ -38,25 +36,6 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
 export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
   const { refresh_token } = req.body
   const result = await authService.logout(refresh_token)
-  return res.json(result)
-}
-
-export const forgotPasswordController = async (
-  req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
-  res: Response
-) => {
-  const { _id, status } = req.user as User
-  const result = await authService.forgotPassword({ user_id: _id?.toString() as string, verify: status })
-  res.json(result)
-}
-
-export const resetPasswordController = async (
-  req: Request<ParamsDictionary, any, ResetPasswordReqBody>,
-  res: Response
-) => {
-  const { user_id } = req.decoded_forgot_password_token as TokenPayload
-  const { password } = req.body
-  const result = await authService.resetPassword({ user_id, password })
   return res.json(result)
 }
 

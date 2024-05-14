@@ -10,6 +10,7 @@ import databaseService from './database.services'
 import axios from 'axios'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
+import { sendVerifyRegisterEmail } from '~/utils/email'
 
 class AuthService {
   private signAccessToken({ user_id, verify }: { user_id: string; verify: UserStatus }) {
@@ -80,25 +81,6 @@ class AuthService {
     return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
   }
 
-  private async signForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserStatus }) {
-    return signToken({
-      payload: {
-        user_id,
-        token_type: TokenType.ForgotPasswordToken,
-        verify
-      },
-      privateKey: process.env.JWT_SECRET_FORGOT_PASSWORD_TOKEN as string,
-      options: {
-        expiresIn: process.env.FORGOT_PASSWORD_TOKEN_EXPIRES_IN
-      }
-    })
-  }
-
-  async checkEmailExist(email: string) {
-    const user = await databaseService.users.findOne({ email })
-    return Boolean(user)
-  }
-
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId()
     const email_verify_token = await this.signEmailVerifyToken({
@@ -125,11 +107,35 @@ class AuthService {
         token: refresh_token
       })
     )
-    console.log('email_verify_token:', email_verify_token)
+
+    // Send email by AWS
+    await sendVerifyRegisterEmail(payload.email, email_verify_token)
 
     return {
       access_token,
       refresh_token
+    }
+  }
+
+  async resendVerifyEmail(user_id: string, verify: UserStatus, email: string) {
+    const email_verify_token = await this.signEmailVerifyToken({ user_id, verify })
+
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          email_verify_token
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+
+    await sendVerifyRegisterEmail(email, email_verify_token)
+
+    return {
+      message: USER_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS
     }
   }
 
@@ -251,44 +257,6 @@ class AuthService {
 
     return {
       message: USER_MESSAGES.LOGOUT_SUCCESS
-    }
-  }
-
-  async forgotPassword({ user_id, verify }: { user_id: string; verify: UserStatus }) {
-    const forgot_password_token = await this.signForgotPasswordToken({ user_id, verify })
-    await databaseService.users.updateOne(
-      {
-        _id: new ObjectId(user_id)
-      },
-      [
-        {
-          $set: {
-            forgot_password_token,
-            updated_at: '$$NOW'
-          }
-        }
-      ]
-    )
-    console.log('forgot_password_token:', forgot_password_token)
-
-    return {
-      message: USER_MESSAGES.CHECK_EMAIL_TO_FORGOT_PASSWORD
-    }
-  }
-
-  async resetPassword({ user_id, password }: { user_id: string; password: string }) {
-    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
-      {
-        $set: {
-          password: hashPassword(password),
-          forgot_password_token: '',
-          updated_at: '$$NOW'
-        }
-      }
-    ])
-
-    return {
-      message: USER_MESSAGES.RESET_PASSWORD_SUCCESS
     }
   }
 
